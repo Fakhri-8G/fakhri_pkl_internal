@@ -48,6 +48,7 @@ class Category extends Model
             }
         });
     }
+
     
     // ==================== RELATIONSHIPS ====================
 
@@ -83,6 +84,7 @@ class Category extends Model
     // ==================== ACCESSORS ====================
 
     /**
+     * Field tambahan: product_count
      * Hitung jumlah produk aktif dalam kategori.
      * Penggunaan: $category->product_count
      */
