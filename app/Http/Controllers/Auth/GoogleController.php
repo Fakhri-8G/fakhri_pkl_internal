@@ -45,6 +45,10 @@ class GoogleController extends Controller
             // 'email'   = Alamat email user
             // 'profile' = Nama dan foto profil
             // 'openid'  = Otomatis ditambahkan untuk Google
+
+            // //TODO:perubahan agar ada pemilihan akun sebelum log in
+            ->with(['prompt' => 'select_account'])
+
             ->redirect();
             // ↑ Ini akan redirect ke URL seperti:
             // https://accounts.google.com/o/oauth2/v2/auth?
