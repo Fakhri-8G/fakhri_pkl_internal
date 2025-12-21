@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -37,15 +40,21 @@ class Product extends Model
     {
         parent::boot();
 
+        // Auto-generate slug yang UNIK saat creating
         static::creating(function ($product) {
             if (empty($product->slug)) {
-                $product->slug = Str::slug($product->name);
+                $baseSlug = Str::slug($product->name);
+                $slug = $baseSlug;
+                $counter = 1;
 
-                // Pastikan slug unik
-                $count = static::where('slug', 'like', $product->slug . '%')->count();
-                if ($count > 0) {
-                    $product->slug .= '-' . ($count + 1);
+                // Loop cek apakah slug sudah dipakai?
+                // Jika ya, tambahkan angka (contoh: produk-1, produk-2)
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $counter;
+                    $counter++;
                 }
+
+                $product->slug = $slug;
             }
         });
     }
@@ -55,7 +64,7 @@ class Product extends Model
     /**
      * Produk termasuk dalam satu kategori.
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
@@ -63,7 +72,7 @@ class Product extends Model
     /**
      * Produk memiliki banyak gambar.
      */
-    public function images()
+    public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
@@ -71,17 +80,35 @@ class Product extends Model
     /**
      * Gambar utama produk.
      */
-    public function primaryImage()
+    public function primaryImage(): HasOne
     {
         return $this->hasOne(ProductImage::class)->where('is_primary', true);
     }
 
     /**
+     * Fallback Image: Jika tidak ada image primary, ambil yang paling tua/pertama diupload.
+     */
+    public function firstImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->oldestOfMany('sort_order');
+    }
+
+    /**
      * Item pesanan yang mengandung produk ini.
      */
-    public function orderItems()
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function wishlistedBy(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
     }
 
     // ==================== ACCESSORS ====================
@@ -91,7 +118,10 @@ class Product extends Model
      */
     public function getDisplayPriceAttribute(): float
     {
-        return $this->discount_price ?? $this->price;
+        if ($this->discount_price !== null && $this->discount_price < $this->price) {
+            return (float) $this->discount_price;
+        }
+        return (float) $this->price;
     }
 
     /**
@@ -119,7 +149,9 @@ class Product extends Model
         if (!$this->has_discount) {
             return 0;
         }
-        return round((($this->price - $this->discount_price) / $this->price) * 100);
+
+        $discount = $this->price - $this->discount_price;
+        return (int) round(($discount / $this->price) * 100);
     }
 
     /**
@@ -128,6 +160,7 @@ class Product extends Model
     public function getHasDiscountAttribute(): bool
     {
         return $this->discount_price !== null
+            && $this->discount_price > 0
             && $this->discount_price < $this->price;
     }
 
@@ -136,10 +169,13 @@ class Product extends Model
      */
     public function getImageUrlAttribute(): string
     {
-        if ($this->primaryImage) {
-            return $this->primaryImage->image_url;
+        $image = $this->primaryImage ?? $this->firstImage ?? $this->images->first();
+
+        if ($image) {
+            return $image->image_url;
         }
-        return asset('images/no-image.png');
+
+        return asset('images/no-product-image.jpg');
     }
 
     /**
@@ -148,6 +184,34 @@ class Product extends Model
     public function getIsAvailableAttribute(): bool
     {
         return $this->is_active && $this->stock > 0;
+    }
+
+    public function getStockLabelAttribute(): string
+    {
+        if ($this->stock <= 0) {
+            return 'Habis';
+        } elseif ($this->stock <= 5) {
+            return 'Sisa ' . $this->stock;
+        }
+        return 'Tersedia';
+    }
+
+    public function getStockBadgeColorAttribute(): string
+    {
+        if ($this->stock <= 0) {
+            return 'danger';
+        } elseif ($this->stock <= 5) {
+            return 'warning';
+        }
+        return 'success';
+    }
+
+    public function getFormattedWeightAttribute(): string
+    {
+        if ($this->weight >= 1000) {
+            return number_format($this->weight / 1000, 1) . ' kg';
+        }
+        return $this->weight . ' gram';
     }
 
     // ==================== SCOPES ====================
@@ -176,6 +240,11 @@ class Product extends Model
         return $query->where('stock', '>', 0);
     }
 
+    public function scopeAvailable($query)
+    {
+        return $query->active()->inStock();
+    }
+
     /**
      * Filter berdasarkan kategori (menggunakan slug).
      */
@@ -184,6 +253,41 @@ class Product extends Model
         return $query->whereHas('category', function($q) use ($categorySlug) {
             $q->where('slug', $categorySlug);
         });
+    }
+
+    public function scopeInCategory($query, int $categoryId)
+    {
+        return $query->where('category_id', $categoryId);
+    }
+
+    public function scopeMinPrice($query, float $min)
+    {
+        return $query->where('price', '>=', $min);
+    }
+
+    public function scopeMaxPrice($query, float $max)
+    {
+        return $query->where('price', '<=', $max);
+    }
+
+    public function scopeOnSale($query)
+    {
+        return $query->whereNotNull('discount_price')
+                     ->whereColumn('discount_price', '<', 'price');
+    }
+
+    public function scopeSortBy($query, ?string $sort)
+    {
+        return match ($sort) {
+            'newest' => $query->latest(),
+            'oldest' => $query->oldest(),
+            'price_asc' => $query->orderBy('price', 'asc'),
+            'price_desc' => $query->orderBy('price', 'desc'),
+            'name_asc' => $query->orderBy('name', 'asc'),
+            'name_desc' => $query->orderBy('name', 'desc'),
+            'popular' => $query->withCount('orderItems')->orderByDesc('order_items_count'),
+            default => $query->latest(),
+        };
     }
 
     /**
@@ -203,5 +307,30 @@ class Product extends Model
     public function scopePriceRange($query, float $min, float $max)
     {
         return $query->whereBetween('price', [$min, $max]);
+    }
+
+    // ==================== HELPER METHODS ====================
+
+    /**
+     * Kurangi stok atomik (thread-safe).
+     */
+    public function decrementStock(int $quantity): bool
+    {
+        if ($this->stock < $quantity) {
+            return false;
+        }
+
+        $this->decrement('stock', $quantity); // Query langsung: UPDATE products SET stock = stock - X
+        return true;
+    }
+
+    public function incrementStock(int $quantity): void
+    {
+        $this->increment('stock', $quantity);
+    }
+
+    public function hasStock(int $quantity = 1): bool
+    {
+        return $this->stock >= $quantity;
     }
 }

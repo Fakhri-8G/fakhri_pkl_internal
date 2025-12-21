@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // ↑ Halaman utama, tidak perlu login
 
-// Katalog Produk
+// Katalog Produk / tampilan produk
 Route::get('/products', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/products/{slug}', [CatalogController::class, 'show'])->name('catalog.show');
 // ↑ Halaman katalog dan detail produk, tidak perlu login
@@ -98,6 +98,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 //     return "Halo, $nama! Selamat datang di Toko Online.";
 //     // ↑ "$nama" = Variable interpolation (masukkan nilai $nama ke string)
 // });
+
 
 // ================================================
 // ROUTE YANG MEMERLUKAN LOGIN

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class Category extends Model
@@ -55,7 +57,7 @@ class Category extends Model
     /**
      * Kategori memiliki banyak produk.
      */
-    public function products()
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
@@ -63,7 +65,7 @@ class Category extends Model
     /**
      * Hanya produk aktif dan tersedia.
      */
-    public function activeProducts()
+    public function activeProducts(): HasMany
     {
         return $this->hasMany(Product::class)
                     ->where('is_active', true)
@@ -79,6 +81,17 @@ class Category extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope: Hanya kategori yang memiliki produk aktif di dalamnya.
+     * Menggunakan whereHas() untuk mengecek relasi.
+     */
+    public function scopeWithProducts($query)
+    {
+        return $query->whereHas('products', function ($q) {
+            $q->where('is_active', true); // Di dalam relasi products
+        });
     }
 
     // ==================== ACCESSORS ====================
@@ -101,6 +114,6 @@ class Category extends Model
         if ($this->image) {
             return asset('storage/' . $this->image);
         }
-        return asset('images/category-placeholder.png');
+        return asset('images/placeholder-category.png');
     }
 }
