@@ -81,6 +81,12 @@ class CatalogController extends Controller
         // ================================================
         $products = $query->paginate(12)->withQueryString();
 
+        // Hitung Range harga global untuk keperluan UI (misal slider harga minimum-maksimum).
+        // selectRaw lebih efisien daripada tarik semua data lalu di loop php.
+        $priceRange = Product::available()
+            ->selectRaw('MIN(price) as min, MAX(price) as max')
+            ->first();
+
         // ================================================
         // 8. DATA SIDEBAR
         // Kategori untuk filter
@@ -92,7 +98,7 @@ class CatalogController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('catalog.index', compact('products', 'categories'));
+        return view('catalog.index', compact('products', 'categories', 'priceRange'));
     }
 
     /**
@@ -101,15 +107,12 @@ class CatalogController extends Controller
      */
     public function show(string $slug)
     {
-        // ================================================
-        // CARI PRODUK BERDASARKAN SLUG
-        // Load semua relasi yang dibutuhkan
-        // ================================================
-        $product = Product::query()
-            ->with(['category', 'images'])  // Load semua gambar
+        // Cari produk berdasarkan SLUG, bukan ID (SEO Friendly).
+        // PENTING: Gunakan scope available() agar user tidak bisa akses produk yang non-aktif via URL langsung.
+        $product = Product::available()
+            ->with(['category', 'images']) // Load semua gambar galeri
             ->where('slug', $slug)
-            ->where('is_active', true)
-            ->firstOrFail();  // 404 jika tidak ditemukan
+            ->firstOrFail(); // 404 jika tidak ketemu
 
         // ================================================
         // PRODUK TERKAIT (RELATED)

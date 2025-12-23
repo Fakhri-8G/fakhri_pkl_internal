@@ -42,6 +42,9 @@ Route::get('/products', [CatalogController::class, 'index'])->name('catalog.inde
 Route::get('/products/{slug}', [CatalogController::class, 'show'])->name('catalog.show');
 // ↑ Halaman katalog dan detail produk, tidak perlu login
 
+Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
+Route::get('/product/{slug}', [CatalogController::class, 'show'])->name('catalog.show');
+
 // ================================================
 // HALAMAN YANG BUTUH LOGIN (Customer)
 // ================================================
