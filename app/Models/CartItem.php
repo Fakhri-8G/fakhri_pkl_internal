@@ -28,4 +28,10 @@ class CartItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    // Relasi ke Cart
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class);
+    }
 }
