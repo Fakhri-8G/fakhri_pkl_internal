@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Auth\Events\Login;
 
 class MergeCartListener
 {
@@ -25,10 +24,4 @@ class MergeCartListener
         $cartService = new \App\Services\CartService();
         $cartService->mergeCartOnLogin();
     }
-
-    protected $listen = [
-        Login::class => [
-            MergeCartListener::class,
-        ],
-    ];
 }
