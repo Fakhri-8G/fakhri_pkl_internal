@@ -1,69 +1,119 @@
 {{-- resources/views/checkout/index.blade.php --}}
+@extends('layouts.app')
 
-<x-app-layout>
-    <div class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-8">Checkout</h1>
+@section('title', 'Checkout')
 
-        <form action="{{ route('checkout.store') }}" method="POST">
-            @csrf
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+@section('content')
+<div class="container py-5">
+    <h1 class="fw-bold mb-4">Checkout</h1>
 
-                {{-- Form Alamat --}}
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h2 class="text-lg font-semibold mb-4">Informasi Pengiriman</h2>
+    <form action="{{ route('checkout.store') }}" method="POST">
+        @csrf
 
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Nama Penerima</label>
-                                <input type="text" name="name" value="{{ auth()->user()->name }}"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                            </div>
+        <div class="row g-4">
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
-                                <input type="text" name="phone"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                            </div>
+            {{-- ===================== --}}
+            {{-- Informasi Pengiriman --}}
+            {{-- ===================== --}}
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title fw-semibold mb-4">
+                            Informasi Pengiriman
+                        </h5>
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Alamat Lengkap</label>
-                                <textarea name="address" rows="3"
-                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required></textarea>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Penerima</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value="{{ auth()->user()->name }}"
+                                class="form-control"
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nomor Telepon</label>
+                            <input
+                                type="text"
+                                name="phone"
+                                class="form-control"
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-0">
+                            <label class="form-label">Alamat Lengkap</label>
+                            <textarea
+                                name="address"
+                                rows="4"
+                                class="form-control"
+                                required
+                            ></textarea>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- Order Summary --}}
-                <div class="lg:col-span-1">
-                    <div class="bg-white p-6 rounded-lg shadow sticky top-4">
-                        <h2 class="text-lg font-semibold mb-4">Ringkasan Pesanan</h2>
+            {{-- ================= --}}
+            {{-- Ringkasan Pesanan --}}
+            {{-- ================= --}}
+            <div class="col-lg-4">
+                <div class="card shadow-sm position-sticky" style="top: 80px;">
+                    <div class="card-body">
+                        <h5 class="card-title fw-semibold mb-4">
+                            Ringkasan Pesanan
+                        </h5>
 
-                        <div class="space-y-4 max-h-60 overflow-y-auto mb-4">
-                            @foreach($cart->items as $item)
-                                <div class="flex justify-between text-sm">
-                                    <span>{{ $item->product->name }} x {{ $item->quantity }}</span>
-                                    <span class="font-medium">{{ number_format($item->subtotal, 0, ',', '.') }}</span>
+                        <div class="mb-3" style="max-height: 260px; overflow-y: auto;">
+                           @foreach($cart->items as $item)
+                                <div class="d-flex align-items-start mb-3 small">
+
+                                    {{-- Gambar Produk --}}
+                                    <img
+                                        src="{{ $item->product->image
+                                            ? asset('storage/' . $item->product->image)
+                                            : asset('images/no-image.png') }}"
+                                        alt="{{ $item->product->name }}"
+                                        class="rounded border me-2"
+                                        style="width: 48px; height: 48px; object-fit: cover;"
+                                    >
+
+                                    {{-- Nama Produk & Qty --}}
+                                    <div class="flex-grow-1 me-2 text-truncate">
+                                        <div class="fw-medium text-truncate">
+                                            {{ $item->product->name }}
+                                        </div>
+                                        <div class="text-muted">
+                                            × {{ $item->quantity }}
+                                        </div>
+                                    </div>
+
+                                    {{-- Harga --}}
+                                    <div class="fw-bold text-nowrap text-end">
+                                        Rp {{ number_format($item->subtotal, 0, ',', '.') }}
+                                    </div>
+
                                 </div>
                             @endforeach
                         </div>
-
-                        <div class="border-t pt-4 space-y-2">
-                            <div class="flex justify-between text-base font-bold">
-                                <span>Total</span>
-                                <span>Rp {{ number_format($cart->items->sum('subtotal'), 0, ',', '.') }}</span>
-                            </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold mb-4">
+                            <span>Total</span>
+                            <span>
+                                Rp {{ number_format($cart->items->sum('subtotal'), 0, ',', '.') }}
+                            </span>
                         </div>
 
-                        <button type="submit"
-                                class="w-full mt-6 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700">
+                        <button type="submit" class="btn btn-primary w-100 py-2">
                             Buat Pesanan
                         </button>
                     </div>
                 </div>
-
             </div>
-        </form>
-    </div>
-</x-app-layout>
+
+        </div>
+    </form>
+</div>
+@endsection
