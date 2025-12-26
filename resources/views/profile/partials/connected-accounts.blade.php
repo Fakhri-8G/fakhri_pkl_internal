@@ -25,6 +25,7 @@
         </div>
 
         @if($user->google_id)
+        {{-- FIXME: tidak ada routenya --}}
             <form action="{{ route('profile.google.unlink') }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')

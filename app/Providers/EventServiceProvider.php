@@ -13,4 +13,9 @@ class EventServiceProvider extends ServiceProvider
             MergeCartListener::class,
         ],
     ];
+
+    public function boot(): void
+    {
+        //
+    }
 }
