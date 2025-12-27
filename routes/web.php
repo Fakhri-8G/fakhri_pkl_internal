@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 
@@ -193,8 +194,20 @@ Route::controller(GoogleController::class)->group(function () {
         ->name('auth.google.callback');
 });
 
-// routes/web.php
+// Route payment/pembayaran
+Route::middleware('auth')->group(function () {
+    // ... routes lainnya
 
+    // Payment Routes
+    Route::get('/orders/{order}/pay', [PaymentController::class, 'show'])
+        ->name('orders.pay');
+    Route::get('/orders/{order}/success', [PaymentController::class, 'success'])
+        ->name('orders.success');
+    Route::get('/orders/{order}/pending', [PaymentController::class, 'pending'])
+        ->name('orders.pending');
+});
+
+// routes that require authentication
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
