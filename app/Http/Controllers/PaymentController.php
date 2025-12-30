@@ -38,4 +38,22 @@ class PaymentController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function success(Order $order)
+    {
+        // pastikan hanya pemilik order
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // jangan update ulang kalau sudah paid
+        if ($order->payment_status !== 'paid') {
+            $order->update([
+                'payment_status' => 'paid',
+                'paid_at' => now(),
+            ]);
+        }
+
+        return view('orders.success', compact('order'));
+    }
 }

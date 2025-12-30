@@ -8,14 +8,15 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MidtransNotificationController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 
 use App\Http\Controllers\Auth\GoogleController;
@@ -206,6 +207,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}/pending', [PaymentController::class, 'pending'])
         ->name('orders.pending');
 });
+
+// ============================================================
+// MIDTRANS WEBHOOK
+// Route ini HARUS public (tanpa auth middleware)
+// Karena diakses oleh SERVER Midtrans, bukan browser user
+// ============================================================
+Route::post('midtrans/notification', [MidtransNotificationController::class, 'handle'])
+    ->name('midtrans.notification');
 
 // routes that require authentication
 Route::middleware('auth')->group(function () {

@@ -72,7 +72,7 @@
                                         </td>
 
                                         {{-- Subtotal --}}
-                                        <td class="text-end align-middle fw-bold">
+                                        <td class="text-end align-middle fw-bold text-nowrap">
                                             Rp {{ number_format($item->subtotal, 0, ',', '.') }}
                                         </td>
 
