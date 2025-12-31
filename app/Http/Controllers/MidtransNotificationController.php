@@ -145,6 +145,17 @@ class MidtransNotificationController extends Controller
                 $this->handleRefund($order, $payment);
                 break;
 
+            case 'expire':
+            case 'cancel':
+                if ($order->status !== 'cancelled') {
+                    // Restock Logic
+                    foreach ($order->items as $item) {
+                        $item->product->increment('stock', $item->quantity);
+                    }
+                    $order->update(['payment_status' => 'failed', 'status' => 'cancelled']);
+                }
+                break;
+
             default:
                 Log::info("Midtrans Notification: Unknown status", [
                     'order_id' => $orderId,

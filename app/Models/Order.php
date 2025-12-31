@@ -32,4 +32,10 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function user()
+    {
+        // Karena Order memiliki user_id, maka gunakan belongsTo
+        return $this->belongsTo(User::class);
+    }
 }

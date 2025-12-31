@@ -110,9 +110,18 @@
                                         <td>{{ $order->user->name }}</td>
                                         <td>Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                                         <td>
-                                            <span class="badge bg-{{ $order->status_color }}">
+                                            {{-- <span class="badge bg-{{ $order->status_color }}">
                                                 {{ ucfirst($order->status) }}
-                                            </span>
+                                            </span> --}}
+                                              @if($order->status == 'pending')
+                                                <span class="badge bg-warning text-dark">Pending</span>
+                                            @elseif($order->status == 'processing')
+                                                <span class="badge bg-info text-dark">Diproses</span>
+                                            @elseif($order->status == 'completed')
+                                                <span class="badge bg-success">Selesai</span>
+                                            @elseif($order->status == 'cancelled')
+                                                <span class="badge bg-danger">Batal</span>
+                                            @endif
                                         </td>
                                         <td>{{ $order->created_at->format('d M Y') }}</td>
                                     </tr>
