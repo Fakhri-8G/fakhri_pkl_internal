@@ -97,16 +97,16 @@
                             <i class="bi bi-people me-2"></i> Pengguna
                         </a> --}}
                     </li>
-
-                    <li class="nav-item mt-3">
-                        <span class="nav-link text-muted small text-uppercase">Laporan</span>
-                    </li>
-
+                <div class="border-bottom border-top border-secondary">
                     <li class="nav-item">
-                        {{-- <a href="{{ route('admin.reports.sales') }}"
+                        <span class="nav-link fw-bold small text-uppercase">Laporan</span>
+                    </li>
+                </div>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.reports.sales') }}"
                            class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
                             <i class="bi bi-graph-up me-2"></i> Laporan Penjualan
-                        </a> --}}
+                        </a>
                     </li>
                 </ul>
             </nav>

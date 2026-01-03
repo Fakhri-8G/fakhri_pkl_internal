@@ -1,7 +1,6 @@
 <?php
 
 // ================================================
-// FILE: routes/web.php
 // FUNGSI: Definisi semua route website
 // ================================================
 
@@ -21,9 +20,10 @@ use App\Http\Controllers\WishlistController;
 
 use App\Http\Controllers\Auth\GoogleController;
 
-use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReportController;
 
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -35,9 +35,12 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
 // home page
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // ↑ Halaman utama, tidak perlu login
+
 
 // Katalog Produk / tampilan produk
 Route::get('/products', [CatalogController::class, 'index'])->name('catalog.index');
@@ -46,6 +49,7 @@ Route::get('/products/{slug}', [CatalogController::class, 'show'])->name('catalo
 
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/product/{slug}', [CatalogController::class, 'show'])->name('catalog.show');
+
 
 // ================================================
 // HALAMAN YANG BUTUH LOGIN (Customer)
@@ -78,6 +82,7 @@ Route::middleware('auth')->group(function () {
     )->name('profile.google.unlink');
 });
 
+
 // ================================================
 // HALAMAN ADMIN (Butuh Login + Role Admin)
 // ================================================
@@ -96,6 +101,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+    // Laporan Penjualan
+    Route::get('/reports/sales',
+            [ReportController::class, 'sales']
+        )->name('reports.sales');
+    Route::get('/reports/sales/export',
+            [ReportController::class, 'exportSales']
+        )->name('reports.export-sales');
 });
 
 
@@ -134,6 +147,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 });
+
 
 // ================================================
 // ROUTE KHUSUS ADMIN
