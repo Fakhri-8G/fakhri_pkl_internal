@@ -10,13 +10,6 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-            $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
-            // 'admin' = nama alias middleware
-            // AdminMiddleware adalah class middleware yang dijalankan/dipanggil
-        ]);
-    })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,

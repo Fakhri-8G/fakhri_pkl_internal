@@ -65,7 +65,7 @@ class ProfileController extends Controller
      * Helper khusus untuk menangani logika upload avatar.
      * Mengembalikan string path file yang tersimpan.
      */
-    protected function uploadAvatar(ProfileUpdateRequest $request, $user): string
+    protected function uploadAvatar(Request $request, $user): string
     {
         // Hapus avatar lama (Garbage Collection)
         // Cek 1: Apakah user punya avatar sebelumnya?
@@ -106,7 +106,7 @@ class ProfileController extends Controller
 
     /**
      * Update password user.
-     */
+    */
     public function updatePassword(Request $request): RedirectResponse
     {
         $validated = $request->validateWithBag('updatePassword', [
@@ -117,10 +117,10 @@ class ProfileController extends Controller
         $request->user()->update([
             'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
         ]);
-
+        
         return back()->with('status', 'password-updated');
     }
-
+    
     /**
      * Menghapus akun user permanen.
      */
@@ -135,7 +135,7 @@ class ProfileController extends Controller
 
         // Logout dulu
         Auth::logout();
-
+        
         // Hapus avatar fisik user sebelum hapus data user
         if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
             Storage::disk('public')->delete($user->avatar);
@@ -143,11 +143,35 @@ class ProfileController extends Controller
 
         // Hapus data user dari DB
         $user->delete();
-
+        
         // Invalidate session agar tidak bisa dipakai lagi (Security)
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
+        
         return Redirect::to('/');
+    }
+
+    public function updateAvatar(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'max:2048'],
+        ],
+        [
+            'avatar.required' => 'File foto profil wajib diunggah.',
+            'avatar.image' => 'File harus berupa gambar (JPG, PNG, WebP).',
+            'avatar.max' => 'Ukuran file maksimal 2MB.',
+        ]);
+        
+
+        $user = $request->user();
+
+        // Pakai helper yang SUDAH kamu punya
+        $avatarPath = $this->uploadAvatar($request, $user);
+
+        $user->update([
+            'avatar' => $avatarPath,
+        ]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui!');
     }
 }

@@ -92,10 +92,10 @@
                     </li>
 
                     <li class="nav-item">
-                        {{-- <a href="{{ route('admin.users.index') }}"
+                        <a href="{{ route('admin.users.index') }}"
                            class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                             <i class="bi bi-people me-2"></i> Pengguna
-                        </a> --}}
+                        </a>
                     </li>
                 <div class="border-bottom border-top border-secondary">
                     <li class="nav-item">

@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Cart;
+use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -59,6 +60,13 @@ class OrderService
                 'shipping_address' => $shippingData['address'],
                 'shipping_phone' => $shippingData['phone'],
                 'total_amount' => $totalAmount,
+            ]);
+
+            // Buat record payment dengan status 'pending'
+            Payment::create([
+                'order_id' => $order->id,
+                'gross_amount' => $order->total_amount,
+                'status' => 'pending',
             ]);
 
             // C. PINDAHKAN ITEMS

@@ -56,4 +56,12 @@ class PaymentController extends Controller
 
         return view('orders.success', compact('order'));
     }
+
+    public function pending(Order $order)
+    {
+        // Optional: pastikan order milik user
+        abort_if($order->user_id !== auth()->id(), 403);
+
+        return view('orders.pending', compact('order'));
+    }
 }

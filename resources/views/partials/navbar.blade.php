@@ -8,7 +8,7 @@
         {{-- Logo & Brand --}}
         <a class="navbar-brand text-primary" href="{{ route('home') }}">
             <i class="bi bi-bag-heart-fill me-2"></i>
-            TokoOnline
+            Toko Seragam Online
         </a>
 
         {{-- Mobile Toggle --}}

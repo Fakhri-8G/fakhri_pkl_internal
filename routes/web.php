@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\UserController;
 
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -80,6 +81,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/google/unlink',
         [ProfileController::class, 'unlinkGoogle']
     )->name('profile.google.unlink');
+    Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])
+    ->name('profile.avatar.update');
 });
 
 
@@ -101,6 +104,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+    // Manajemen Pengguna
+    Route::get('/users', [UserController::class, 'index'])
+            ->name('users.index');
 
     // Laporan Penjualan
     Route::get('/reports/sales',
@@ -230,8 +237,7 @@ Route::middleware('auth')->group(function () {
 // Route ini HARUS public (tanpa auth middleware)
 // Karena diakses oleh SERVER Midtrans, bukan browser user
 // ============================================================
-Route::post('midtrans/notification', [MidtransNotificationController::class, 'handle'])
-    ->name('midtrans.notification');
+
 
 // routes that require authentication
 Route::middleware('auth')->group(function () {

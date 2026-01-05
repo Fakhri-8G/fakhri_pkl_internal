@@ -84,17 +84,20 @@ class MidtransNotificationController extends Controller
         // Kita harus pastikan logika kita aman jika dipanggil double.
         // Jika order sudah berstatus final (processing/shipped/delivered), stop.
         // ============================================================
-        if (in_array($order->status, ['processing', 'shipped', 'delivered', 'cancelled'])) {
+        //FIXME: menghapus beberapa status
+        if (in_array($order->status, ['processing', 'completed', 'cancelled'])) {
             Log::info("Midtrans Notification: Order already processed", ['order_id' => $orderId]);
             return response()->json(['message' => 'Order already processed'], 200);
         }
 
         // 7. Update Data Tambahan di Payment Record
         // Simpan transaction_id dari Midtrans untuk referensi refund nanti
+        //FIXME: menambahkan midtrans order id
         $payment = $order->payment;
         if ($payment) {
             $payment->update([
                 'midtrans_transaction_id' => $transactionId,
+                'midtrans_order_id'       => $orderId,
                 'payment_type'            => $paymentType,
                 'raw_response'            => json_encode($payload),
             ]);
@@ -131,16 +134,6 @@ class MidtransNotificationController extends Controller
                 $this->handleFailed($order, $payment, 'Pembayaran ditolak');
                 break;
 
-            case 'expire':
-                // Token expired (tidak dibayar tepat waktu)
-                $this->handleFailed($order, $payment, 'Pembayaran kadaluarsa');
-                break;
-
-            case 'cancel':
-                // Dibatalkan user/admin
-                $this->handleFailed($order, $payment, 'Pembayaran dibatalkan');
-                break;
-
             case 'refund':
             case 'partial_refund':
                 $this->handleRefund($order, $payment);
@@ -173,6 +166,7 @@ class MidtransNotificationController extends Controller
     /**
      * Handle pembayaran sukses.
      */
+    //FIXME: menambahkan payment status di update order
     protected function handleSuccess(Order $order, ?Payment $payment): void
     {
         Log::info("Payment SUCCESS for Order: {$order->order_number}");
@@ -180,6 +174,7 @@ class MidtransNotificationController extends Controller
         // Update Order
         $order->update([
             'status' => 'processing', // Siap diproses/dikirim
+            'payment_status' => 'paid',
         ]);
 
         // Update Payment
@@ -250,9 +245,13 @@ class MidtransNotificationController extends Controller
     }
 
     // Fire OrderPaidEvent
+    //FIXME: menambahkan event order paid
     private function setSuccess(Order $order)
     {
-        $order->update([...]);
+        $order->update([
+            'status' => 'processing',
+            'payment_status' => 'paid',
+        ]);
 
         // Fire & Forget
         event(new OrderPaidEvent($order));
