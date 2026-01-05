@@ -252,3 +252,6 @@ Route::middleware('auth')->group(function () {
 // AUTH ROUTES (dari Laravel UI)
 // ================================================
 Auth::routes();
+
+// Batasi 5 request per menit
+Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');
