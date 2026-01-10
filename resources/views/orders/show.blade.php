@@ -35,6 +35,7 @@
                                     'processing' => 'bg-info text-white',
                                     'shipped' => 'bg-primary text-white',
                                     'delivered' => 'bg-success text-white',
+                                    'completed' => 'bg-success text-white',
                                     'cancelled' => 'bg-danger text-white',
                                 ];
                                 $badgeClass = $statusClasses[$order->status] ?? 'bg-secondary text-white';
@@ -67,8 +68,15 @@
                                             <span class="fw-medium text-dark">{{ $item->product_name }}</span>
                                         </td>
                                         <td class="text-center py-3">{{ $item->quantity }}</td>
-                                        <td class="text-end py-3 text-muted">
-                                            Rp {{ number_format($item->price, 0, ',', '.') }}
+                                        <td class="text-end py-3">
+                                            @if($item->product->discount_price > 0 && $item->price < $item->product->price)
+                                                <small class="text-muted text-decoration-line-through d-block" style="font-size: 0.8rem;">
+                                                    Rp {{ number_format($item->product->price, 0, ',', '.') }}
+                                                </small>
+                                            @endif
+                                            <span class="text-dark">
+                                                Rp {{ number_format($item->price, 0, ',', '.') }}
+                                            </span>
                                         </td>
                                         <td class="text-end py-3 fw-bold">
                                             Rp {{ number_format($item->subtotal, 0, ',', '.') }}

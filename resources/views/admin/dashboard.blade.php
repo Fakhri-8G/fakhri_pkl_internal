@@ -3,81 +3,100 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="row g-4 mb-4">
-        {{-- 1. Stats Cards Grid --}}
+<style>
+    /* Custom Styling untuk Tampilan Premium */
+    .dashboard-card {
+        transition: all 0.3s ease;
+        border: none !important;
+        border-radius: 15px;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+    }
+    .icon-shape {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+    }
+    .chart-container {
+        position: relative;
+        height: 300px;
+    }
+    .product-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    .badge-soft-success { background-color: #d1e7dd; color: #0f5132; }
+    .badge-soft-warning { background-color: #fff3cd; color: #664d03; }
+    .badge-soft-danger { background-color: #f8d7da; color: #842029; }
+    .badge-soft-primary { background-color: #cfe2ff; color: #084298; }
+</style>
 
+<div class="container-fluid py-4">
+    {{-- 1. Stats Cards Grid --}}
+    <div class="row g-4 mb-4">
         {{-- Revenue Card --}}
         <div class="col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm border-start border-4 border-success h-100">
+            <div class="card dashboard-card shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Total Pendapatan</p>
-                            <h4 class="fw-bold mb-0 text-success">
-                                Rp {{ number_format($stats['total_revenue'], 0, ',', '.') }}
-                            </h4>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-shape bg-success bg-opacity-10 text-success me-3">
+                            <i class="bi bi-currency-dollar fs-4"></i>
                         </div>
-                        <div class="bg-success bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-wallet2 text-success fs-3"></i>
-                        </div>
+                        <p class="text-muted mb-0 small fw-bold text-uppercase">Total Pendapatan</p>
                     </div>
+                    <h3 class="fw-bold mb-0">Rp {{ number_format($stats['total_revenue'], 0, ',', '.') }}</h3>
                 </div>
             </div>
         </div>
 
         {{-- Pending Action Card --}}
         <div class="col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm border-start border-4 border-warning h-100">
+            <div class="card dashboard-card shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Perlu Diproses</p>
-                            <h4 class="fw-bold mb-0 text-warning">
-                                {{ $stats['pending_orders'] }}
-                            </h4>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-shape bg-warning bg-opacity-10 text-warning me-3">
+                            <i class="bi bi-clock-history fs-4"></i>
                         </div>
-                        <div class="bg-warning bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-box-seam text-warning fs-3"></i>
-                        </div>
+                        <p class="text-muted mb-0 small fw-bold text-uppercase">Perlu Diproses</p>
                     </div>
+                    <h3 class="fw-bold mb-0">{{ $stats['pending_orders'] }}</h3>
                 </div>
             </div>
         </div>
 
         {{-- Low Stock Card --}}
         <div class="col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm border-start border-4 border-danger h-100">
+            <div class="card dashboard-card shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Stok Menipis</p>
-                            <h4 class="fw-bold mb-0 text-danger">
-                                {{ $stats['low_stock'] }}
-                            </h4>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-shape bg-danger bg-opacity-10 text-danger me-3">
+                            <i class="bi bi-exclamation-circle fs-4"></i>
                         </div>
-                        <div class="bg-danger bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-exclamation-triangle text-danger fs-3"></i>
-                        </div>
+                        <p class="text-muted mb-0 small fw-bold text-uppercase">Stok Menipis</p>
                     </div>
+                    <h3 class="fw-bold mb-0">{{ $stats['low_stock'] }}</h3>
                 </div>
             </div>
         </div>
 
         {{-- Total Products --}}
         <div class="col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm border-start border-4 border-primary h-100">
+            <div class="card dashboard-card shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Total Produk</p>
-                            <h4 class="fw-bold mb-0 text-primary">
-                                {{ $stats['total_products'] }}
-                            </h4>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-shape bg-primary bg-opacity-10 text-primary me-3">
+                            <i class="bi bi-box-seam fs-4"></i>
                         </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-tags text-primary fs-3"></i>
-                        </div>
+                        <p class="text-muted mb-0 small fw-bold text-uppercase">Total Produk</p>
                     </div>
+                    <h3 class="fw-bold mb-0">{{ $stats['total_products'] }}</h3>
                 </div>
             </div>
         </div>
@@ -86,124 +105,121 @@
     <div class="row g-4">
         {{-- 2. Revenue Chart --}}
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">Grafik Penjualan (7 Hari)</h5>
+            <div class="card dashboard-card shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-bold">Analitik Penjualan</h5>
+                    <p class="text-muted small">Statistik pendapatan 7 hari terakhir</p>
                 </div>
-                <div class="card-body">
-                    <canvas id="revenueChart" height="100"></canvas>
+                <div class="card-body px-4 pb-4">
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
         {{-- 3. Recent Orders --}}
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">Pesanan Terbaru</h5>
+            <div class="card dashboard-card shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Pesanan Baru</h5>
+                    <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-light text-primary fw-bold">Lihat Semua</a>
                 </div>
-                <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        @foreach($recentOrders as $order)
-                            <div class="list-group-item d-flex justify-content-between align-items-center px-4 py-3">
-                                <div>
-                                    <div class="fw-bold text-primary">#{{ $order->order_number }}</div>
-                                    <small class="text-muted">{{ $order->user->name }}</small>
-                                </div>
-                                <div class="text-end">
-                                    <div class="fw-bold">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</div>
-                                    <span class="badge rounded-pill
-                                        {{ $order->payment_status == 'paid' ? 'bg-success bg-opacity-10 text-success' : 'bg-secondary bg-opacity-10 text-secondary' }}">
-                                        {{ ucfirst($order->status) }}
-                                    </span>
-                                </div>
-                            </div>
-                        @endforeach
+                <div class="card-body px-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle table-borderless">
+                            <tbody>
+                                @foreach($recentOrders as $order)
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">#{{ $order->order_number }}</div>
+                                        <div class="text-muted small">{{ $order->user->name }}</div>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="fw-bold small">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</div>
+                                        <span class="badge {{ $order->payment_status == 'paid' ? 'badge-soft-success' : 'badge-soft-primary' }} rounded-pill" style="font-size: 0.7rem">
+                                            {{ strtoupper($order->status) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                <div class="card-footer bg-white text-center py-3">
-                    <a href="{{ route('admin.orders.index') }}" class="text-decoration-none fw-bold">
-                        Lihat Semua Pesanan &rarr;
-                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     {{-- 4. Top Selling Products --}}
-    <div class="card border-0 shadow-sm mt-4">
-        <div class="card-header bg-white py-3">
-            <h5 class="card-title mb-0">Produk Terlaris</h5>
-        </div>
-        <div class="card-body">
-            <div class="row g-4">
-                @foreach($topProducts as $product)
-                    <div class="col-6 col-md-2 text-center">
-                        <div class="card h-100 border-0 hover-shadow transition">
-                            <img src="{{ $product->image_url }}" class="card-img-top rounded mb-2" style="max-height: 100px; object-fit: cover;">
-                            <h6 class="card-title text-truncate" style="font-size: 0.9rem">{{ $product->name }}</h6>
-                            <small class="text-muted">{{ $product->sold }} terjual</small>
-                        </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card dashboard-card shadow-sm">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-bold">Produk Terlaris</h5>
+                </div>
+                <div class="card-body px-4">
+                    <div class="row g-4 pb-3">
+                        @foreach($topProducts as $product)
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <div class="text-center p-3 border rounded-4 transition hover-shadow h-100">
+                                    <img src="{{ $product->image_url }}" class="product-img mb-2 shadow-sm">
+                                    <h6 class="text-truncate mb-1" title="{{ $product->name }}" style="font-size: 0.85rem">{{ $product->name }}</h6>
+                                    <span class="badge badge-soft-primary">{{ $product->sold }} Terjual</span>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    {{-- Script Chart.js --}}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('revenueChart').getContext('2d');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    
+    // Gradient Background untuk Chart
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(13, 110, 253, 0.2)');
+    gradient.addColorStop(1, 'rgba(13, 110, 253, 0)');
 
-        // Data dari Controller (Blade to JS)
-        const labels = {!! json_encode($revenueChart->pluck('date')) !!};
-        const data = {!! json_encode($revenueChart->pluck('total')) !!};
-
-        new Chart(ctx, {
-            type: 'line', // Jenis grafik: Line chart
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Pendapatan (Rp)',
-                    data: data,
-                    borderColor: '#0d6efd', // Bootstrap Primary Color
-                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.3, // Membuat garis sedikit melengkung (smooth)
-                    fill: true,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }]
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($revenueChart->pluck('date')) !!},
+            datasets: [{
+                label: 'Pendapatan',
+                data: {!! json_encode($revenueChart->pluck('total')) !!},
+                borderColor: '#0d6efd',
+                backgroundColor: gradient,
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#0d6efd',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // Penting agar Chart menyesuaikan container
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                // Format Tooltip jadi Rupiah
-                                return 'Rp ' + new Intl.NumberFormat('id-ID').format(context.raw);
-                            }
-                        }
+            scales: {
+                y: {
+                    grid: { display: true, drawBorder: false, color: '#f0f0f0' },
+                    ticks: { 
+                        callback: value => 'Rp ' + new Intl.NumberFormat('id-ID', { notation: "compact" }).format(value)
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { borderDash: [2, 4] },
-                        ticks: {
-                            callback: function(value) {
-                                return 'Rp ' + new Intl.NumberFormat('id-ID', { notation: "compact" }).format(value);
-                            }
-                        }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                }
+                x: { grid: { display: false } }
             }
-        });
-    </script>
+        }
+    });
+</script>
 @endsection

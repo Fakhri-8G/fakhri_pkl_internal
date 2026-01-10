@@ -35,7 +35,7 @@ class ReportController extends Controller
             ->whereDate('created_at', '<=', $dateTo)
             ->where('payment_status', 'paid') // PENTING: Hanya hitung yang 'paid' (uang masuk)
             ->latest() // alias orderBy created_at desc
-            ->paginate(20);
+            ->paginate(10);
 
         // 3. Query Summary (Total Omset di periode ini)
         // Perhatikan: Kita tidak menggunakan data pagination ($orders) untuk menghitung total.

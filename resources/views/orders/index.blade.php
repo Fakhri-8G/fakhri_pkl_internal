@@ -27,6 +27,7 @@
                                     @elseif($order->status == 'processing') bg-info text-dark
                                     @elseif($order->status == 'shipped') bg-primary
                                     @elseif($order->status == 'delivered') bg-success
+                                    @elseif($order->status == 'completed') bg-success
                                     @elseif($order->status == 'cancelled') bg-danger
                                     @endif
                                 ">

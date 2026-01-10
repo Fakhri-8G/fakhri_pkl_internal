@@ -21,7 +21,7 @@
             @method('PUT')
 
             {{-- ================= BASIC INFO ================= --}}
-            <div class="card shadow-sm border-0 mb-4">
+            <div class="card shadow-sm border-3 mb-4">
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3 text-muted">
                         <i class="bi bi-info-circle me-1"></i> Informasi Produk
@@ -58,7 +58,7 @@
             </div>
 
             {{-- ================= PRICE & STOCK ================= --}}
-            <div class="card shadow-sm border-0 mb-4">
+            <div class="card shadow-sm border-3 mb-4">
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3 text-muted">
                         <i class="bi bi-cash-stack me-1"></i> Harga & Stok
@@ -98,7 +98,7 @@
             </div>
 
             {{-- ================= IMAGES ================= --}}
-            <div class="card shadow-sm border-0 mb-4">
+            <div class="card shadow-sm border-3 mb-4">
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3 text-muted">
                         <i class="bi bi-images me-1"></i> Gambar Produk
@@ -145,7 +145,7 @@
             </div>
 
             {{-- ================= STATUS ================= --}}
-            <div class="card shadow-sm border-0 mb-4">
+            <div class="card shadow-sm border-3 mb-4">
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3 text-muted">
                         <i class="bi bi-toggle-on me-1"></i> Status Produk

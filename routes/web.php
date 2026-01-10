@@ -237,7 +237,8 @@ Route::middleware('auth')->group(function () {
 // Route ini HARUS public (tanpa auth middleware)
 // Karena diakses oleh SERVER Midtrans, bukan browser user
 // ============================================================
-
+Route::post('midtrans/notification', [MidtransNotificationController::class, 'handle'])
+    ->name('midtrans.notification');
 
 // routes that require authentication
 Route::middleware('auth')->group(function () {
@@ -254,4 +255,4 @@ Route::middleware('auth')->group(function () {
 Auth::routes();
 
 // Batasi 5 request per menit
-Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');
+// Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');

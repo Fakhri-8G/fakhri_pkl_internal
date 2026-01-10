@@ -185,6 +185,9 @@ class MidtransNotificationController extends Controller
             ]);
         }
 
+        $order->load('user');
+        event(new OrderPaidEvent($order));
+
         // TODO: Kirim email konfirmasi pembayaran
         // event(new PaymentSuccessful($order));
     }
@@ -245,7 +248,7 @@ class MidtransNotificationController extends Controller
     }
 
     // Fire OrderPaidEvent
-    //FIXME: menambahkan event order paid
+    //FIXME: menambahkan status dan payment status 
     private function setSuccess(Order $order)
     {
         $order->update([

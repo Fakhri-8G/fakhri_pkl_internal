@@ -7,7 +7,7 @@
     <h2 class="h3 mb-0 text-gray-800">Daftar Pesanan</h2>
 </div>
 
-<div class="card shadow-sm border-0">
+<div class="card shadow-sm border-3">
     <div class="card-header bg-white py-3">
         {{-- Filter Status --}}
         <ul class="nav nav-pills card-header-pills">
@@ -22,6 +22,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request('status') == 'completed' ? 'active' : '' }}" href="{{ route('admin.orders.index', ['status' => 'completed']) }}">Selesai</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'cancelled' ? 'active' : '' }}" href="{{ route('admin.orders.index', ['status' => 'cancelled']) }}">Batal</a>
             </li>
         </ul>
     </div>

@@ -52,7 +52,7 @@
                                         </td>
 
                                         {{-- Harga Produk --}}
-                                        <td class="text-center align-middle">
+                                        <td class="text-center align-middle text-nowrap">
                                             {{ $item->product->formatted_price }}
                                         </td>
 

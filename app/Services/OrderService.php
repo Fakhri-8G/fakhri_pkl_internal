@@ -46,7 +46,13 @@ class OrderService
                 if ($item->quantity > $item->product->stock) {
                     throw new \Exception("Stok produk {$item->product->name} tidak mencukupi.");
                 }
-                $totalAmount += $item->product->price * $item->quantity;
+
+                // Cek apakah ada harga diskon, jika tidak ada/nol, gunakan harga asli
+                $hargaAktif = ($item->product->discount_price > 0)
+                    ? $item->product->discount_price
+                    : $item->product->price;
+
+                $totalAmount += $hargaAktif * $item->quantity;
             }
 
             // B. BUAT HEADER ORDER
@@ -71,6 +77,11 @@ class OrderService
 
             // C. PINDAHKAN ITEMS
             foreach ($cart->items as $item) {
+                // Ambil harga aktif lagi di sini
+                $hargaAktif = ($item->product->discount_price > 0)
+                    ? $item->product->discount_price
+                    : $item->product->price;
+
                 // Buat Order Item
                 $order->items()->create([
                     'product_id' => $item->product_id,
@@ -80,10 +91,10 @@ class OrderService
                     // Tujuannya: Jika besok admin ubah harga/nama produk,
                     // data di historical order user TIDAK IKUT BERUBAH.
                     'product_name' => $item->product->name,
-                    'price' => $item->product->price,
+                    'price' => $hargaAktif,
 
                     'quantity' => $item->quantity,
-                    'subtotal' => $item->product->price * $item->quantity,
+                    'subtotal' => $hargaAktif * $item->quantity,
                 ]);
 
                 // D. KURANGI STOK (ATOMIC)

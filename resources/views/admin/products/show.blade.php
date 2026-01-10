@@ -25,7 +25,7 @@
 
             {{-- ================= IMAGES ================= --}}
             <div class="col-lg-5">
-                <div class="card shadow-sm border-0">
+                <div class="card shadow-sm border-3">
                     <div class="card-body p-3">
 
                         {{-- Primary Image --}}
@@ -48,7 +48,7 @@
 
             {{-- ================= PRODUCT INFO ================= --}}
             <div class="col-lg-7">
-                <div class="card shadow-sm border-0 h-100">
+                <div class="card shadow-sm border-3 h-100">
                     <div class="card-body p-4">
 
                         <h4 class="fw-bold mb-1">

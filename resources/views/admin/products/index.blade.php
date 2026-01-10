@@ -31,7 +31,7 @@
     </div>
 </form>
 
-<div class="card shadow-sm border-0">
+<div class="card shadow-sm border-3">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
@@ -39,10 +39,10 @@
                     <th>Gambar</th>
                     <th>Nama</th>
                     <th>Kategori</th>
-                    <th>Harga</th>
+                    <th width="150">Harga</th>
                     <th>Stok</th>
                     <th>Status</th>
-                    <th width="160">Aksi</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,7 +54,7 @@
                     </td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
-                    <td>Rp {{ number_format($product->price) }}</td>
+                    <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                     <td>{{ $product->stock }}</td>
                     <td>
                         <span class="badge bg-{{ $product->is_active ? 'success' : 'secondary' }}">
@@ -62,8 +62,15 @@
                         </span>
                     </td>
                     <td>
-                        <a href="{{ route('admin.products.show', $product) }}" class="btn btn-sm btn-info">Detail</a>
-                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ route('admin.products.show', $product) }}" class="btn btn-sm btn-info"><i class="bi bi-card-list"></i></a>
+                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                            style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Yakin ingin menghapus produk ini?')"><i class="bi bi-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
                 @empty
