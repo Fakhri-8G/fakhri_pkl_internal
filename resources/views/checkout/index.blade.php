@@ -92,9 +92,15 @@
 
                                     {{-- Harga --}}
                                     <div class="fw-bold text-nowrap text-end">
-                                        Rp {{ number_format($item->subtotal, 0, ',', '.') }}
+                                         @if($item->product->discount_price > 0 && $item->price < $item->product->price)
+                                                <small class="text-muted text-decoration-line-through d-block" style="font-size: 0.8rem;">
+                                                    Rp {{ number_format($item->product->price, 0, ',', '.') }}
+                                                </small>
+                                            @endif
+                                            <span class="text-dark">                                            
+                                                {{ $item->product->formatted_price }}
+                                            </span>
                                     </div>
-
                                 </div>
                             @endforeach
                         </div>

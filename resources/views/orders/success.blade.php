@@ -8,7 +8,7 @@
 <div class="container py-5">
     <div class="text-center">
 
-        <h1 class="text-success mb-3">✅ Pembayaran Berhasil</h1>
+        <h1 class="text-success mb-3">Pembayaran Berhasil <i class="bi bi-check-circle"></i></h1>
 
         <p class="lead">
             Terima kasih, pesanan <strong class="fw-bold">#{{ $order->order_number }}</strong>

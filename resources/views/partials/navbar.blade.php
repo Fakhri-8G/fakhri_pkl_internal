@@ -62,7 +62,7 @@
                     {{-- Cart --}}
                     <li class="nav-item">
                         <a class="nav-link position-relative px-2" href="{{ route('cart.index') }}" title="Keranjang Belanja">
-                            <i class="bi bi-bag-check fs-5"></i>
+                            <i class="bi bi-cart3 fs-5"></i>
                             @php
                                 $cartCount = auth()->user()->cart?->items()->count() ?? 0;
                             @endphp

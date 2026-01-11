@@ -24,7 +24,7 @@
                             <i class="bi bi-cart-check me-2"></i>Belanja Sekarang
                         </a>
                         <a href="{{ route('catalog.index') }}" class="btn btn-outline-light btn-lg">
-                            Lihat Jenjang
+                            Lihat Katalog
                         </a>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
         </div>
     </section>
 
-    {{-- Kategori: Berdasarkan Jenjang Sekolah --}}
+    {{-- Kategori --}}
     <section id="kategori" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5 fw-bold">Pilih Seragam Sekolah</h2>
@@ -73,7 +73,6 @@
                            class="text-decoration-none">
                             <div class="card border-0 shadow-sm text-center h-100 py-3 hover-shadow">
                                 <div class="card-body">
-                                    {{-- Menggunakan icon/image yang merepresentasikan SD/SMP/SMA --}}
                                     <img src="{{ $category->image_url }}" 
                                          alt="{{ $category->name }}" 
                                          class="mb-3"
