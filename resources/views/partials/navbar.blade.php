@@ -6,7 +6,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
         {{-- Logo & Brand sekolah --}}
-        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" style="min-width: 200px;">
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" style="min-width: 200px;" title="Home">
             <div class="bg-primary text-white rounded-3 p-2 me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
                 <i class="bi bi-mortarboard-fill"></i>
             </div>
@@ -44,12 +44,12 @@
             <ul class="navbar-nav ms-auto align-items-center">
                 {{-- Link Katalog --}}
                 <li class="nav-item">
-                    <a class="nav-link text-dark fw-medium" href="{{ route('catalog.index') }}">Katalog Lengkap</a>
+                    <a class="nav-link text-dark fw-medium" href="{{ route('catalog.index') }}" title="Katalog">Katalog Lengkap</a>
                 </li>
                 @auth
                     {{-- Wishlist --}}
                     <li class="nav-item">
-                        <a class="nav-link position-relative px-2" href="{{ route('wishlist.index') }}" title="Favorit/Wishlist">
+                        <a class="nav-link position-relative px-2" href="{{ route('wishlist.index') }}" title="Favorit">
                             <i class="bi bi-heart fs-5"></i>
                             @if(auth()->user()->wishlists()->count() > 0)
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem;">
@@ -76,20 +76,19 @@
 
                     {{-- User Dropdown --}}
                     <li class="nav-item dropdown ms-2">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center p-0" 
+                        <a class="nav-link d-flex align-items-center p-0" 
                            href="#" id="userDropdown" 
-                           data-bs-toggle="dropdown">
+                           data-bs-toggle="dropdown"
+                           title="Profil"
+                           >
                             <img src="{{ auth()->user()->avatar_url }}" 
                                  class="rounded-circle border" 
                                  width="35" height="35" 
                                  alt="{{ auth()->user()->name }}"
                                  style="object-fit: cover;">
+                                <span class="d-none d-lg-inline p-1">{{ auth()->user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                            <li class="px-3 py-2 border-bottom mb-2">
-                                <span class="d-block fw-bold small">{{ auth()->user()->name }}</span>
-                                <span class="text-muted small">{{ auth()->user()->email }}</span>
-                            </li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                     <i class="bi bi-person me-2 text-muted"></i> Profil Saya

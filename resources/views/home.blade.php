@@ -30,8 +30,10 @@
                 </div>
                 <div class="col-lg-6 d-none d-lg-block text-center">
                     {{-- Ganti image-hero dengan ilustrasi siswa sekolah --}}
-                    <img src="{{ asset('assets/images/logo1.png') }}" 
-                         alt="Seragam Sekolah" class="img-fluid" style="max-height: 450px; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.2));">
+                    <a href="{{ route('catalog.index', ['on_sale' => 1]) }}" title="Lihat Produk Diskon">
+                        <img src="{{ asset('assets/images/on-sale2.png') }}" 
+                            alt="Seragam Sekolah" class="img-fluid" style="max-height: 450px; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.2));">
+                    </a>
                 </div>
             </div>
         </div>
@@ -93,7 +95,7 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="mb-0 fw-bold">Paket Hemat Seragam</h2>
+                    <h2 class="mb-0 fw-bold">Produk Populer</h2>
                     <p class="text-muted">Setelan lengkap baju, celana/rok, dan atribut.</p>
                 </div>
                 <a href="{{ route('catalog.index', ['filter' => 'paket-hemat']) }}" class="btn btn-primary">
@@ -119,8 +121,8 @@
                         <div class="card-body d-flex flex-column justify-content-center p-4">
                             <div class="z-1">
                                 <span class="badge bg-white text-danger mb-2">Terbatas!</span>
-                                <h3>Promo Back to School</h3>
-                                <p>Beli 3 setel seragam gratis sabuk sekolah.</p>
+                                <h3>Promo 20% Back to School</h3>
+                                <p>Beli 2 setel seragam gratis sabuk sekolah.</p>
                                 <a href="#" class="btn btn-light fw-bold px-4">Ambil Promo</a>
                             </div>
                         </div>
@@ -131,7 +133,7 @@
                         <div class="card-body d-flex flex-column justify-content-center p-4">
                             <div class="z-1">
                                 <h3>Pesanan Grosir / Almamater?</h3>
-                                <p>Terima pesanan khusus seragam batik, olahraga, dan jas almamater untuk sekolah.</p>
+                                <p>Terima pesanan khusus seragam batik dan jas almamater untuk sekolah.</p>
                                 <a href="https://wa.me/your-number" class="btn btn-success fw-bold px-4">
                                     <i class="bi bi-whatsapp me-2"></i>Hubungi Admin
                                 </a>
@@ -146,7 +148,7 @@
     {{-- Aksesoris & Atribut --}}
     <section class="py-5 bg-white">
         <div class="container">
-            <h2 class="text-center mb-4 fw-bold">Atribut & Kelengkapan</h2>
+            <h2 class="text-center mb-4 fw-bold">Produk Terbaru</h2>
             <div class="row g-4">
                 @foreach($latestProducts as $product)
                     <div class="col-6 col-md-4 col-lg-3">

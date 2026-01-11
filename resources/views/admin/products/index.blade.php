@@ -49,8 +49,8 @@
                 @forelse($products as $product)
                 <tr>
                     <td>
-                        <img src="{{ $product->primaryImage?->image_url ?? asset('img/no-image.png') }}" class="rounded"
-                            width="60">
+                        <img src="{{ $product->primaryImage?->image_url ?? asset('assets/images/empty/no-image.png') }}" class="rounded"
+                            width="50">
                     </td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>

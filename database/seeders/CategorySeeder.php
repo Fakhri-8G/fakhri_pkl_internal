@@ -34,9 +34,9 @@ class CategorySeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'name' => 'Atribut Sekolah',
-                'slug' => 'atribut-sekolah',
-                'description' => 'Dasi, Sabuk, Topi, dan atribut lainnya untuk seragam sekolah',
+                'name' => 'Seragam Pramuka',
+                'slug' => 'seragam-pramuka',
+                'description' => 'Seragam pramuka dan perlengkapannya',
                 'is_active' => true,
             ],
             [
@@ -52,9 +52,9 @@ class CategorySeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'name' => 'Pramuka',
-                'slug' => 'pramuka',
-                'description' => 'Baju pramuka dan aksesori',
+                'name' => 'Baju Praktek',
+                'slug' => 'baju-praktek',
+                'description' => 'Baju praktek untuk kegiatan laboratorium dan prakter lainnya di sekolah',
                 'is_active' => true,
             ],
         ];

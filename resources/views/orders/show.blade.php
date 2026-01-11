@@ -76,7 +76,7 @@
                                             @endif
                                             <span class="text-dark">
                                                 Rp {{ number_format($item->price, 0, ',', '.') }}
-                                            </span>
+                                        </span>
                                         </td>
                                         <td class="text-end py-3 fw-bold">
                                             Rp {{ number_format($item->subtotal, 0, ',', '.') }}

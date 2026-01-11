@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
 
         // 4. Buat produk
-        Product::factory(50)->create();
-        $this->command->info('✅ 50 products created');
+        Product::factory(20)->create();
+        $this->command->info('✅ 20 products created');
 
         // 5. Buat beberapa produk featured
         Product::factory(8)->featured()->create();

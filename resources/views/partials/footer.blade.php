@@ -29,7 +29,7 @@
                 <h6 class="text-white mb-3 fw-bold">Koleksi Seragam</h6>
                 <ul class="list-unstyled">
                     <li class="mb-2">
-                        <a href="{{ route('catalog.index', ['category' => 'batik']) }}" class="text-secondary text-decoration-none small hover-link">
+                        <a href="{{ route('catalog.index', ['category' => 'baju-batik']) }}" class="text-secondary text-decoration-none small hover-link">
                             Seragam Batik
                         </a>
                     </li>
@@ -39,12 +39,12 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="{{ route('catalog.index', ['category' => 'smk']) }}" class="text-secondary text-decoration-none small hover-link">
+                        <a href="{{ route('catalog.index', ['category' => 'kemeja-putih']) }}" class="text-secondary text-decoration-none small hover-link">
                             Seragam SMK
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="{{ route('catalog.index', ['category' => 'pramuka']) }}" class="text-secondary text-decoration-none small hover-link">
+                        <a href="{{ route('catalog.index', ['category' => 'seragam-pramuka']) }}" class="text-secondary text-decoration-none small hover-link">
                             Atribut Pramuka
                         </a>
                     </li>

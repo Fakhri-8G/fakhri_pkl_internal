@@ -100,6 +100,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Kategori CRUD
     Route::resource('categories', AdminCategoryController::class);
 
+    // User CRUD
+    Route::resource('users', UserController::class);
+
     // Manajemen Pesanan
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
@@ -254,5 +257,10 @@ Route::middleware('auth')->group(function () {
 // ================================================
 Auth::routes();
 
+// Route testing error page
+Route::get('/cek', function () {
+    abort(404);
+});
+
 // Batasi 5 request per menit
-// Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');
+// Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');Fu

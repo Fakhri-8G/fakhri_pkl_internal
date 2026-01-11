@@ -53,7 +53,14 @@
 
                                         {{-- Harga Produk --}}
                                         <td class="text-center align-middle text-nowrap">
-                                            {{ $item->product->formatted_price }}
+                                             @if($item->product->discount_price > 0 && $item->price < $item->product->price)
+                                                <small class="text-muted text-decoration-line-through d-block" style="font-size: 0.8rem;">
+                                                    Rp {{ number_format($item->product->price, 0, ',', '.') }}
+                                                </small>
+                                            @endif
+                                            <span class="text-dark">                                            
+                                                {{ $item->product->formatted_price }}
+                                            </span>
                                         </td>
 
                                         {{-- Jumlah Produk --}}
