@@ -1,22 +1,65 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+    {{-- CSRF Token untuk AJAX --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-                <div class="card-body">
+    {{-- SEO Meta Tags --}}
+    <title>@yield('title', 'Toko Online') - {{ config('app.name') }}</title>
+    <meta name="description" content="@yield('meta_description', 'Toko online terpercaya dengan produk berkualitas')">
+
+    {{-- Favicon --}}
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+
+    {{-- Google Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {{-- Vite CSS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Stack untuk CSS tambahan per halaman --}}
+    @stack('styles')
+
+     <!-- ... meta tags ... -->
+    @vite(['resources/css/app.css', 'resources/js/app.js']) {{-- Stack untuk
+    script tambahan dari child view --}} @stack('scripts')
+</head>
+<body>
+    <div class="container mt-3">
+        @include('partials.flash-messages')
+    </div>
+
+    <div class="container py-5">
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="col-md-5">
+            
+            {{-- Card Utama --}}
+            <div class="card border-0 shadow-lg" style="border-radius: 1.25rem; overflow: hidden;">
+                
+                {{-- Header dengan Gradasi --}}
+                <div class="card-header bg-primary bg-gradient text-white text-center py-4 border-0">
+                    <h3 class="fw-bold mb-0">Daftar Akun</h3>
+                    <p class="small mb-0 opacity-75">Bergabunglah dengan komunitas kami</p>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
-                        <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
+                        {{-- Input Nama --}}
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-semibold text-secondary small">Nama Lengkap</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                                <input id="name" type="text" 
+                                    class="form-control bg-light border-start-0 @error('name') is-invalid @enderror" 
+                                    name="name" value="{{ old('name') }}" required 
+                                    placeholder="Masukkan nama lengkap" autofocus>
+                                
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -25,12 +68,16 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
+                        {{-- Input Email --}}
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-semibold text-secondary small">Alamat Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope"></i></span>
+                                <input id="email" type="email" 
+                                    class="form-control bg-light border-start-0 @error('email') is-invalid @enderror" 
+                                    name="email" value="{{ old('email') }}" required 
+                                    placeholder="contoh@email.com">
+                                
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -39,12 +86,15 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
+                        {{-- Input Password --}}
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-semibold text-secondary small">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock"></i></span>
+                                <input id="password" type="password" 
+                                    class="form-control bg-light border-start-0 @error('password') is-invalid @enderror" 
+                                    name="password" required placeholder="Minimal 8 karakter">
+                                
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -53,55 +103,75 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                        {{-- Konfirmasi Password --}}
+                        <div class="mb-4">
+                            <label for="password-confirm" class="form-label fw-semibold text-secondary small">Ulangi Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-shield-check"></i></span>
+                                <input id="password-confirm" type="password" 
+                                    class="form-control bg-light border-start-0" 
+                                    name="password_confirmation" required placeholder="Konfirmasi password">
                             </div>
                         </div>
 
-                        {{-- ======================================== Tambahkan setelah form register
-                        ======================================== --}} {{-- Divider --}}
-                        <div class="position-relative my-4">
-                        <hr />
-                        <span
-                            class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted"
-                        >
-                            atau daftar dengan
-                        </span>
+                        {{-- Button Register --}}
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm fw-bold py-2" style="border-radius: 10px;">
+                                Daftar Sekarang
+                            </button>
                         </div>
 
-                        {{-- Google Sign-up Button --}}
+                        {{-- Divider --}}
+                        <div class="position-relative mb-4">
+                            <hr class="text-secondary">
+                            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">Atau</span>
+                        </div>
+
+                        {{-- Social Register --}}
                         <div class="d-grid gap-2">
-                        <a href="{{ route('auth.google') }}" class="btn btn-outline-danger btn-lg">
-                            {{-- Google SVG Icon --}}
-                            <svg class="me-2" width="20" height="20" viewBox="0 0 24 24">
-                            {{-- ... SVG paths sama seperti di login ... --}}
-                            </svg>
-                            Daftar dengan Google
-                        </a>
+                            <a href="{{ route('auth.google') }}" class="btn btn-outline-dark py-2 d-flex align-items-center justify-content-center" style="border-radius: 10px;">
+                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" class="me-2" alt="Google">
+                                Daftar dengan Google
+                            </a>
                         </div>
 
-                        {{-- Teks login --}}
-                        <p class="mt-4 text-center mb-0">
-                        Sudah punya akun?
-                        <a href="{{ route('login') }}" class="text-decoration-none fw-bold">
-                            Login
-                        </a>
-                        </p>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
+                        {{-- Link Login --}}
+                        <div class="mt-4 text-center">
+                            <p class="text-muted mb-0">Sudah punya akun? 
+                                <a href="{{ route('login') }}" class="text-primary fw-bold text-decoration-none">Masuk di sini</a>
+                            </p>
                         </div>
                     </form>
                 </div>
             </div>
+            
+            <div class="text-center mt-4 text-muted small">
+                &copy; {{ date('Y') }} {{ config('app.name') }}. Keamanan terjamin.
+            </div>
         </div>
     </div>
 </div>
-@endsection
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: none;
+        background-color: #fff !important;
+    }
+    .input-group-text {
+        color: #6c757d;
+    }
+    .btn-primary {
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3) !important;
+    }
+</style>
+</body>
+</html>
